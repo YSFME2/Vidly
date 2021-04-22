@@ -1,7 +1,26 @@
-﻿@model Vidly.Models.Movie 
+﻿@model Vidly.ViewModel.RandomViewModel 
 @{
     ViewBag.Title = "Random";
 }
 
-<h2>Random | @Model.Name</h2>
+@{ 
+    var style = Model.Customers.Count == 0 ? "bg-danger" : (Model.Customers.Count == 1 ? "bg-success":(Model.Customers.Count == 2?"bg-primary": "bg-secondary"));
+}
+
+<h2 class="@style">Random | @Model.Movie.Name</h2>
+
+
+@if(Model.Customers?.Count == 0)
+{
+    <p>No Data To show</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in Model.Customers)
+        {
+            <li>@item.Name</li>
+        }
+    </ul>
+}
 
