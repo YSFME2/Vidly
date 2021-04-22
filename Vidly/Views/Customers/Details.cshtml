@@ -11,16 +11,37 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            Name
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
 
+
+        <dt>
+            Membership Type
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MembershipType.Name)
+        </dd>
+
+        @if (Model.BirthDate != null)
+        {
+
+            <dt>
+                Birth Date
+            </dt>
+
+            <dd>
+                @Model.BirthDate.Value.ToString("dd/MM/yyyy")
+            </dd>
+        }
+
     </dl>
 </div>
 @*<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>*@
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@

@@ -4,18 +4,39 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Model.Name</h2>
 
 <div>
     <h4>Movie</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            Genre
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Model.Genre.Name
+        </dd>
+        <dt>
+            Release Date
+        </dt>
+
+        <dd>
+            @Model.ReleaseDate
+        </dd>
+        <dt>
+            Date Added
+        </dt>
+
+        <dd>
+            @Model.AddedDate
+        </dd>
+        <dt>
+            Number In Stock
+        </dt>
+
+        <dd>
+            @Model.NumberInStock
         </dd>
 
     </dl>
