@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
 using System.Data.Entity;
+using Vidly.ViewModel;
 
 namespace Vidly.Controllers
 {
@@ -15,6 +16,23 @@ namespace Vidly.Controllers
         {
             _context = new ApplicationDbContext();
         }
+
+
+        public ActionResult New()
+        {
+            return View(new CustomerFormViewModel { MembershipTypes = _context.MembershipTypes });
+        }
+
+        [HttpPost]
+        public ActionResult Save(Customer customer)
+        {
+            if (customer.ID == 0)
+                _context.Customers.Add(customer);
+            else
+                TryValidateModel(customer);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
@@ -22,15 +40,22 @@ namespace Vidly.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            return View(_context.Customers.Include(x=>x.MembershipType));
+            return View(_context.Customers.Include(x => x.MembershipType));
         }
         public ActionResult Details(int id)
         {
-            var customer = _context.Customers.Include(x=>x.MembershipType).FirstOrDefault(x => x.ID == id);
+            var customer = _context.Customers.Include(x => x.MembershipType).FirstOrDefault(x => x.ID == id);
             if (customer != null)
                 return View(customer);
             else
                 return HttpNotFound();
+        }
+        public ActionResult Edit(int id)
+        {
+            var cust = _context.Customers.FirstOrDefault(x => x.ID == id);
+            if (cust == null)
+                return HttpNotFound();
+            return View("New", new CustomerFormViewModel { Customer = cust, MembershipTypes = _context.MembershipTypes });
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using Vidly.Models;
 using Vidly.ViewModel;
+using AutoMapper;
 
 namespace Vidly.Controllers
 {
@@ -25,7 +26,7 @@ namespace Vidly.Controllers
         // GET: Movies
         public ActionResult Index()
         {
-            return View(_context.Movies.Include(x=>x.Genre));
+            return View(_context.Movies.Include(x => x.Genre));
         }
 
         public ActionResult Details(int id)
@@ -54,6 +55,37 @@ namespace Vidly.Controllers
             return View(rand);
         }
 
+        public ActionResult MovieForm()
+        {
+            return View(new MovieFormViewModel { Genres = _context.Genres });
+        }
+
+        [HttpPost]
+        public ActionResult Create(Movie movie)
+        {
+            movie.AddedDate = DateTime.Now;
+            _context.Movies.Add(movie);
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id = movie.Id });
+        }
+
+        [HttpPost]
+        public ActionResult SaveEdit(MovieFormViewModel editedMovie)
+        {
+            var movie = _context.Movies.FirstOrDefault(x => x.Id == editedMovie.Movie.Id);
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Movie, Movie>());
+            new Mapper(config).Map(editedMovie.Movie, movie);
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id = movie.Id });
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var movie = _context.Movies.FirstOrDefault(x => x.Id == id);
+            if (movie == null)
+                return HttpNotFound();
+            return View("MovieForm",new MovieFormViewModel { Movie = movie, Genres = _context.Genres});
+        }
 
         [Route("movies/search/{year:range(1900,2022)}/{rate}/{typed}/{age}/{word}")]
         public ActionResult Find(int year, int rate, int typed, string age, string word)
