@@ -26,6 +26,10 @@ namespace Vidly.Controllers
         [HttpPost]
         public ActionResult Save(Customer customer)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("New", new CustomerFormViewModel { MembershipTypes = _context.MembershipTypes,Customer = customer });
+            }
             if (customer.ID == 0)
                 _context.Customers.Add(customer);
             else

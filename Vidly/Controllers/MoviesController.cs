@@ -63,6 +63,8 @@ namespace Vidly.Controllers
         [HttpPost]
         public ActionResult Create(Movie movie)
         {
+            if (!ModelState.IsValid)
+                return View("MovieForm", new MovieFormViewModel { Genres = _context.Genres, Movie = movie });
             movie.AddedDate = DateTime.Now;
             _context.Movies.Add(movie);
             _context.SaveChanges();
@@ -84,7 +86,7 @@ namespace Vidly.Controllers
             var movie = _context.Movies.FirstOrDefault(x => x.Id == id);
             if (movie == null)
                 return HttpNotFound();
-            return View("MovieForm",new MovieFormViewModel { Movie = movie, Genres = _context.Genres});
+            return View("MovieForm", new MovieFormViewModel { Movie = movie, Genres = _context.Genres });
         }
 
         [Route("movies/search/{year:range(1900,2022)}/{rate}/{typed}/{age}/{word}")]
