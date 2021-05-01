@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "MovieForm";
 }
-@if (Model.Movie == null)
+@if (Model.Movie.Id == 0)
 {
     <h2>Create Movie</h2>
 }
@@ -11,7 +11,7 @@ else
     <h2>Edit Movie</h2>
 }
 
-@using (Html.BeginForm(Model.Movie == null ? "Create" : "SaveEdit", "Movies"))
+@using (Html.BeginForm(Model.Movie.Id == 0 ? "Create" : "SaveEdit", "Movies"))
 {
     <div class="form-group">
         @Html.LabelFor(m => m.Movie.Name)
@@ -20,12 +20,13 @@ else
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Movie.ReleaseDate)
-        @Html.TextBoxFor(m => m.Movie.ReleaseDate, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Movie.ReleaseDate, new { @class = "form-control", type = "date" })
         @Html.ValidationMessageFor(m => m.Movie.ReleaseDate)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Movie.GenreID)
         @Html.DropDownListFor(m => m.Movie.GenreID, new SelectList(Model.Genres, "Id", "Name"), new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Movie.GenreID)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Movie.NumberInStock)
@@ -34,6 +35,15 @@ else
     </div>
     @Html.HiddenFor(m => m.Movie.Id)
     @Html.HiddenFor(m => m.Movie.AddedDate)
+
+    @Html.ValidationSummary()
+
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i>Save</button>
+}
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
 }
 

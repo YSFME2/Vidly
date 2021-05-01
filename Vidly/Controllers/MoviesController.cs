@@ -57,21 +57,23 @@ namespace Vidly.Controllers
 
         public ActionResult MovieForm()
         {
-            return View(new MovieFormViewModel { Genres = _context.Genres });
+            return View(new MovieFormViewModel { Genres = _context.Genres,Movie = new Movie() });
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Movie movie)
         {
+            movie.AddedDate = DateTime.Now;
             if (!ModelState.IsValid)
                 return View("MovieForm", new MovieFormViewModel { Genres = _context.Genres, Movie = movie });
-            movie.AddedDate = DateTime.Now;
             _context.Movies.Add(movie);
             _context.SaveChanges();
             return RedirectToAction("Details", new { id = movie.Id });
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SaveEdit(MovieFormViewModel editedMovie)
         {
             var movie = _context.Movies.FirstOrDefault(x => x.Id == editedMovie.Movie.Id);
