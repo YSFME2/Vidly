@@ -115,7 +115,7 @@ namespace Vidly.Controllers
             if (!ModelState.IsValid)
             {
                 return View(model);
-            }
+            } 
 
             // The following code protects for brute force attacks against the two factor codes. 
             // If a user enters incorrect codes for a specified amount of time then the user account 
