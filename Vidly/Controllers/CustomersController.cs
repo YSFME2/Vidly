@@ -17,7 +17,6 @@ namespace Vidly.Controllers
             _context = new ApplicationDbContext();
         }
 
-
         public ActionResult New()
         {
             return View(new CustomerFormViewModel { MembershipTypes = _context.MembershipTypes });
@@ -45,7 +44,7 @@ namespace Vidly.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            return View(_context.Customers.Include(x => x.MembershipType));
+            return View();
         }
         public ActionResult Details(int id)
         {

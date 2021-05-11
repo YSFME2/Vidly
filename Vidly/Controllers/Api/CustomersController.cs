@@ -72,14 +72,15 @@ namespace Vidly.Controllers.Api
 
 
         [HttpDelete]
-        public void DeleteCustomer(int id)
+        public IHttpActionResult DeleteCustomer(int id)
         {
             var cust = _context.Customers.FirstOrDefault(x => x.ID == id);
             if (cust == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return BadRequest();
 
             _context.Customers.Remove(cust);
             _context.SaveChanges();
+            return Ok();
         }
     }
 }

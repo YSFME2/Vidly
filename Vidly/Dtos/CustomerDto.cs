@@ -10,7 +10,7 @@ namespace Vidly.Dtos
 {
     public class CustomerDto
     {
-
+        public int ID { get; set; }
         [StringLength(255)]
         public string Name { get; set; }
         public DateTime? BirthDate { get; set; }
