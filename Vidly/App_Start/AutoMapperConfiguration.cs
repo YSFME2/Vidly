@@ -15,12 +15,16 @@ namespace Vidly.App_Start
         public static void Initailize()
         {
             MapperConfiguration mapperConfiguration = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Movie, Movie>();
+                //customers
                 cfg.CreateMap<Customer, CustomerDto>().ForMember(dis=>dis.MembershipType,src => src.MapFrom(x=>x.MembershipType.Name));
                 cfg.CreateMap<CustomerDto, Customer>();
-                cfg.CreateMap<Movie, MovieDto>().ForMember(dis=>dis.Genre,src => src.MapFrom(x=>x.Genre.Name));
-                cfg.CreateMap<MovieDto, Movie>();
                 cfg.CreateMap<CustomerCreateDto, Customer>();
+
+
+                //movies
+                cfg.CreateMap<Movie, Movie>();
+                cfg.CreateMap<Movie, MovieDto>().ForMember(dis=>dis.Genre,src => src.MapFrom(x=>x.Genre.Name));
+                cfg.CreateMap<MovieCreateDto, Movie>();
             });
             Mapper = mapperConfiguration.CreateMapper();
         }

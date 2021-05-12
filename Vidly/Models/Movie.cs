@@ -23,6 +23,6 @@ namespace Vidly.Models
         [Display(Name = "Genre")]
         [Required]
         public int GenreID { get; set; }
-        public Genre Genre { get; set; }
+        public virtual Genre Genre { get; set; }
     }
 }

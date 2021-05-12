@@ -6,13 +6,17 @@ using System.Web;
 
 namespace Vidly.Dtos.Movie
 {
-    public class MovieDto
+    public class MovieCreateDto
     {
-        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public DateTime ReleaseDate { get; set; }
-        public DateTime AddedDate { get; set; }
+        [Required]
+        [Range(1, 20)]
         public int NumberInStock { get; set; }
-        public string Genre { get; set; }
+
+        [Required]
+        public int GenreID { get; set; }
     }
 }
