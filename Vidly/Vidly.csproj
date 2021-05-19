@@ -199,6 +199,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\RoleName.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -272,6 +273,10 @@
     <Compile Include="Migrations\202105102351254_seed-users.Designer.cs">
       <DependentUpon>202105102351254_seed-users.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105182344240_seed-customerrole.cs" />
+    <Compile Include="Migrations\202105182344240_seed-customerrole.Designer.cs">
+      <DependentUpon>202105182344240_seed-customerrole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -284,7 +289,9 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validations\Mini18YearsIfaMember.cs" />
     <Compile Include="ViewModel\CustomerFormViewModel.cs" />
+    <Compile Include="ViewModel\CustomersDisplay.cs" />
     <Compile Include="ViewModel\MovieFormViewModel.cs" />
+    <Compile Include="ViewModel\MoviesDisplay.cs" />
     <Compile Include="ViewModel\RandomViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -634,6 +641,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105102351254_seed-users.resx">
       <DependentUpon>202105102351254_seed-users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105182344240_seed-customerrole.resx">
+      <DependentUpon>202105182344240_seed-customerrole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

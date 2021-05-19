@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vidly.Models.Customer>
+﻿@model Vidly.ViewModel.CustomersDisplay
 
 @{
     ViewBag.Title = "Index";
@@ -7,7 +7,10 @@
 <h2>Customers</h2>
 
 <p>
-    @Html.ActionLink("Create New", "New", null, new { @class = "btn btn-primary" })
+    @if (Model.CanCustomerManage)
+    {
+        @Html.ActionLink("Create New", "New", null, new { @class = "btn btn-primary" })
+    }
 </p>
 
 
@@ -15,13 +18,30 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th>Membership Type</th>
-            <th>Operations</th>
+            @if (Model.CanCustomerManage)
+            {
+                <th>Operations</th>
+            }
         </tr>
     </thead>
     <tbody>
+        @foreach (var item in Model.Customers)
+        {
+            <tr>
+                <td>@Html.ActionLink(item.Name, "Details", new { id = item.ID })</td>
+                <td>@item.MembershipType.Name</td>
+                @if (Model.CanCustomerManage)
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit",new {id = item.ID })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { onclick = "return confirm('Are you want to Delete this Customer?');" })
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 
 </table>
@@ -30,29 +50,31 @@
 {
     <script>
         $(document).ready(function () {
-            var table = $("#customers").DataTable({
-                ajax: {
-                    url: "/api/Customers",
-                    dataSrc: ""
-                },
-                columns: [
-                    {
-                        data: "name",
-                        render: function (data, type, customer) {
-                            return "<a href='/Customers/Details/" + customer.id + "'>" + data + "</a>";
-                        }
-                    },
-                    {
-                        data: "membershipType"
-                    },
-                    {
-                        data: "id",
-                        render: function (data) {
-                            return "<a href='/Customers/Edit/" + data + "'>Edit</a> <button data-customerid='" + data + "' class='btn-link js-delete'>Delete</button>"
-                        }
-                    }
-                ]
-            });
+            var table = $("#customers").DataTable(
+                //    {
+                //    ajax: {
+                //        url: "/api/Customers",
+                //        dataSrc: ""
+                //    },
+                //    columns: [
+                //        {
+                //            data: "name",
+                //            render: function (data, type, customer) {
+                //                return "<a href='/Customers/Details/" + customer.id + "'>" + data + "</a>";
+                //            }
+                //        },
+                //        {
+                //            data: "membershipType"
+                //        },
+                //        {
+                //            data: "id",
+                //            render: function (data) {
+                //                return "<a href='/Customers/Edit/" + data + "'>Edit</a> <button data-customerid='" + data + "' class='btn-link js-delete'>Delete</button>"
+                //            }
+                //        }
+                //    ]
+                //}
+            );
             $("#customers").on("click", ".js-delete", function () {
                 var btn = $(this);
                 bootbox.confirm("Are you want to delete this customer?", function (result) {

@@ -6,15 +6,20 @@ using System.Web.Mvc;
 using Vidly.Models;
 using System.Data.Entity;
 using Vidly.ViewModel;
+using static Vidly.App_Code.RoleName;
+using Vidly.Dtos;
 
 namespace Vidly.Controllers
 {
+    [Authorize]
     public class CustomersController : Controller
     {
         private ApplicationDbContext _context;
+        AutoMapper.IMapper _mapper;
         public CustomersController()
         {
             _context = new ApplicationDbContext();
+            _mapper = App_Start.AutoMapperConfiguration.Mapper;
         }
 
         public ActionResult New()
@@ -24,11 +29,12 @@ namespace Vidly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = CanManageCustomers)]
         public ActionResult Save(Customer customer)
         {
             if (!ModelState.IsValid)
             {
-                return View("New", new CustomerFormViewModel { MembershipTypes = _context.MembershipTypes,Customer = customer });
+                return View("New", new CustomerFormViewModel { MembershipTypes = _context.MembershipTypes, Customer = customer });
             }
             if (customer.ID == 0)
                 _context.Customers.Add(customer);
@@ -41,10 +47,27 @@ namespace Vidly.Controllers
         {
             _context.Dispose();
         }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = CanManageCustomers)]
+        public ActionResult Delete(int id)
+        {
+            var cust = _context.Customers.FirstOrDefault(x => x.ID == id);
+            if (cust == null)
+                return HttpNotFound();
+
+            _context.Customers.Remove(cust);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
         // GET: Customers
         public ActionResult Index()
         {
-            return View();
+            return View(new CustomersDisplay() { Customers = _context.Customers.ToList(), CanCustomerManage = User.IsInRole(CanManageCustomers) });
         }
         public ActionResult Details(int id)
         {
@@ -54,6 +77,9 @@ namespace Vidly.Controllers
             else
                 return HttpNotFound();
         }
+
+
+        [Authorize(Roles = CanManageCustomers)]
         public ActionResult Edit(int id)
         {
             var cust = _context.Customers.FirstOrDefault(x => x.ID == id);

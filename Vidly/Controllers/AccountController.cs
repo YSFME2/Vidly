@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Vidly.App_Code;
 using Vidly.Models;
 
 namespace Vidly.Controllers
@@ -53,6 +55,18 @@ namespace Vidly.Controllers
             }
         }
 
+
+        //add new role
+        [AllowAnonymous]
+        public  ActionResult AddNewRole()
+        {
+            //var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+            //var roleManager = new RoleManager<IdentityRole>(roleStore);
+            //roleManager.Create(new IdentityRole(RoleName.CanManageCustomers));
+            return Content("Created");
+        }
+
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -62,6 +76,24 @@ namespace Vidly.Controllers
             return View();
         }
 
+        public static string HashPassword(string password)
+        {
+            byte[] salt;
+            byte[] buffer2;
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, 0x10, 0x3e8))
+            {
+                salt = bytes.Salt;
+                buffer2 = bytes.GetBytes(0x20);
+            }
+            byte[] dst = new byte[0x31];
+            Buffer.BlockCopy(salt, 0, dst, 1, 0x10);
+            Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
+            return Convert.ToBase64String(dst);
+        }
         //
         // POST: /Account/Login
         [HttpPost]
@@ -73,7 +105,7 @@ namespace Vidly.Controllers
             {
                 return View(model);
             }
-
+            var hashed = HashPassword(model.Password);
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -152,7 +184,7 @@ namespace Vidly.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -274,6 +306,7 @@ namespace Vidly.Controllers
             AddErrors(result);
             return View();
         }
+
 
         //
         // GET: /Account/ResetPasswordConfirmation

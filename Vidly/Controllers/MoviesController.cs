@@ -7,6 +7,7 @@ using System.Data.Entity;
 using Vidly.Models;
 using Vidly.ViewModel;
 using AutoMapper;
+using static Vidly.App_Code.RoleName;
 
 namespace Vidly.Controllers
 {
@@ -26,7 +27,7 @@ namespace Vidly.Controllers
         // GET: Movies
         public ActionResult Index()
         {
-            return View(_context.Movies.Include(x => x.Genre));
+            return View(new MoviesDisplay { Movies = _context.Movies.Include(x => x.Genre), CanManageMovies = User.IsInRole(App_Code.RoleName.CanManageMovies) });
         }
 
         public ActionResult Details(int id)
@@ -55,13 +56,15 @@ namespace Vidly.Controllers
             return View(rand);
         }
 
+        [Authorize(Roles = CanManageMovies)]
         public ActionResult MovieForm()
         {
-            return View(new MovieFormViewModel { Genres = _context.Genres,Movie = new Movie() });
+            return View(new MovieFormViewModel { Genres = _context.Genres, Movie = new Movie() });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = CanManageMovies)]
         public ActionResult Create(Movie movie)
         {
             movie.AddedDate = DateTime.Now;
@@ -74,6 +77,7 @@ namespace Vidly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = CanManageMovies)]
         public ActionResult SaveEdit(MovieFormViewModel editedMovie)
         {
             var movie = _context.Movies.FirstOrDefault(x => x.Id == editedMovie.Movie.Id);
@@ -83,6 +87,7 @@ namespace Vidly.Controllers
             return RedirectToAction("Details", new { id = movie.Id });
         }
 
+        [Authorize(Roles = CanManageMovies)]
         public ActionResult Edit(int id)
         {
             var movie = _context.Movies.FirstOrDefault(x => x.Id == id);
@@ -95,6 +100,20 @@ namespace Vidly.Controllers
         public ActionResult Find(int year, int rate, int typed, string age, string word)
         {
             return Content($"year = {year} , rate = {rate / 10}/10 , type = {typed} , age = {age} , word = {word}");
+        }
+
+
+
+        [Authorize(Roles = CanManageMovies)]
+        public ActionResult Delete(int id)
+        {
+            var movie = _context.Movies.FirstOrDefault(x=>x.Id == id);
+            if (movie == null)
+                return HttpNotFound();
+
+            _context.Movies.Remove(movie);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
