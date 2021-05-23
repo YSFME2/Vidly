@@ -19,10 +19,12 @@ namespace Vidly.Models
         [Display(Name = "Number In Stock")]
         [Range(1,20)]
         public int NumberInStock { get; set; }
+        public int NumberAvailable { get; set; }
 
         [Display(Name = "Genre")]
         [Required]
         public int GenreID { get; set; }
         public virtual Genre Genre { get; set; }
+        public virtual ICollection<Rental> Rentals { get; set; }
     }
 }

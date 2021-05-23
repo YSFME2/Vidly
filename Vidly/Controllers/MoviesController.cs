@@ -103,7 +103,7 @@ namespace Vidly.Controllers
         }
 
 
-
+        [HttpDelete]
         [Authorize(Roles = CanManageMovies)]
         public ActionResult Delete(int id)
         {
@@ -113,7 +113,7 @@ namespace Vidly.Controllers
 
             _context.Movies.Remove(movie);
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return Content($"{movie.Name} deleted successfully");
         }
     }
 }

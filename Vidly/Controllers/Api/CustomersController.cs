@@ -30,6 +30,8 @@ namespace Vidly.Controllers.Api
 
         //get all cutomers
         public IEnumerable<CustomerDto> GetCustomers() => _mapper.Map<List<Customer>, List<CustomerDto>>(_context.Customers.ToList());
+        [HttpGet]
+        public IEnumerable<CustomerDto> GetCustomers(string query) => _mapper.Map<List<Customer>, List<CustomerDto>>(_context.Customers.Where(x=>x.Name.Contains(query)).ToList());
 
         //get customer
         public IHttpActionResult GetCustomer(int id)

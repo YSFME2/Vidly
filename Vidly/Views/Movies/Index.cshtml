@@ -26,7 +26,7 @@
                 {
                     <th>Operations</th>
                 }
-            </tr>
+            </tr> 
         </thead>
         <tbody>
             @foreach (var item in Model.Movies)
@@ -38,7 +38,7 @@
                     {
                         <td>
                             @Html.ActionLink("Edit","Edit",new {id = item.Id })
-                            @Html.ActionLink("Delete","Delete",new {id = item.Id },new { onclick="return confirm('Are you want to Delete this Movie?');" })
+                            @Html.ActionLink("Delete","Delete",new {id = item.Id },new { @class= "js-delete" })
                         </td>
                     }
                 </tr>
@@ -56,20 +56,22 @@ else
     <script>
         $(document).ready(function () {
             var table = $("#moviesTable").DataTable();
-            //$("#moviesTable").on("click", ".js-delete", function () {
-            //    var btn = $(this);
-            //    bootbox.confirm("Are you want to delete this Movie?", function (result) {
-            //        if (result) {
-            //            $.ajax({
-            //                url: "/api/Movies/" + btn.attr("data-movieid"),
-            //                method: "DELETE",
-            //                success: function () {
-            //                    table.row(btn.parents("tr")).remove().draw();
-            //                }
-            //            });
-            //        }
-            //    });
-            //});
+            $("#moviesTable").on("click", ".js-delete", function () {
+                var btn = $(this);
+                bootbox.confirm("Are you want to delete this Movie?", function (result) {
+                    debugger;
+                    if (result) {
+                        $.ajax({
+                            url:  btn.attr("href"),
+                            method: "DELETE",
+                            success: function (d) {
+                                table.row(btn.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+                return false;
+            });
 
         });
     </script>

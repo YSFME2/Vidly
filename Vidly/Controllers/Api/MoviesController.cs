@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Vidly.Dtos.Movie;
 using Vidly.Models;
+using static Vidly.App_Code.RoleName;
 
 namespace Vidly.Controllers.Api
 {
@@ -27,8 +28,11 @@ namespace Vidly.Controllers.Api
 
         //get all movies
         public IHttpActionResult GetMovies() => Ok(_mapper.Map<List<Movie>,List<MovieDto>>(_context.Movies.ToList()));
+        [HttpGet]
+        public IHttpActionResult GetMovies(string query) => Ok(_mapper.Map<List<Movie>,List<MovieDto>>(_context.Movies.Where(x=>x.Name.Contains(query)).ToList()));
 
 
+        [HttpGet]
         //get movie by id 
         public IHttpActionResult GetMovie(int id)
         {
@@ -89,6 +93,9 @@ namespace Vidly.Controllers.Api
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
+            if (!User.IsInRole(CanManageMovies))
+                return BadRequest();
+
             var mov = _context.Movies.FirstOrDefault(x => x.Id == id);
             if (mov == null)
                 return NotFound();

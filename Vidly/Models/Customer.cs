@@ -20,5 +20,6 @@ namespace Vidly.Models
         public virtual MembershipType MembershipType { get; set; }
         [Display(Name = "Membership Type")]
         public byte MembershipTypeId { get; set; }
+        public virtual ICollection<Rental> Rentals { get; set; }
     }
 }

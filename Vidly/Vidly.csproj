@@ -210,14 +210,18 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\CustomersController.cs" />
     <Compile Include="Controllers\Api\MoviesController.cs" />
+    <Compile Include="Controllers\Api\RentalsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
+    <Compile Include="Controllers\RentalsController.cs" />
     <Compile Include="Dtos\CustomerCreateDto.cs" />
     <Compile Include="Dtos\CustomerDto.cs" />
     <Compile Include="Dtos\Movie\MovieCreateDto.cs" />
     <Compile Include="Dtos\Movie\MovieDto.cs" />
+    <Compile Include="Dtos\Rentals\NewRentalDto.cs" />
+    <Compile Include="Dtos\Rentals\RentalDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -277,6 +281,18 @@
     <Compile Include="Migrations\202105182344240_seed-customerrole.Designer.cs">
       <DependentUpon>202105182344240_seed-customerrole.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105211610207_user_details.cs" />
+    <Compile Include="Migrations\202105211610207_user_details.Designer.cs">
+      <DependentUpon>202105211610207_user_details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202105211645463_addingrental.cs" />
+    <Compile Include="Migrations\202105211645463_addingrental.Designer.cs">
+      <DependentUpon>202105211645463_addingrental.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202105220040473_movie-availablity.cs" />
+    <Compile Include="Migrations\202105220040473_movie-availablity.Designer.cs">
+      <DependentUpon>202105220040473_movie-availablity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -285,6 +301,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MembershipType.cs" />
     <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\Rental.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validations\Mini18YearsIfaMember.cs" />
@@ -461,10 +478,13 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\typeahead.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bloodhound.js" />
+    <Content Include="Scripts\bloodhound.min.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -559,6 +579,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\typeahead.bundle.js" />
+    <Content Include="Scripts\typeahead.bundle.min.js" />
+    <Content Include="Scripts\typeahead.jquery.js" />
+    <Content Include="Scripts\typeahead.jquery.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -601,6 +625,7 @@
     <Content Include="Views\Movies\Details.cshtml" />
     <Content Include="Views\Customers\New.cshtml" />
     <Content Include="Views\Movies\MovieForm.cshtml" />
+    <Content Include="Views\Rentals\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202104131406403_InitialCreate.resx">
@@ -644,6 +669,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105182344240_seed-customerrole.resx">
       <DependentUpon>202105182344240_seed-customerrole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105211610207_user_details.resx">
+      <DependentUpon>202105211610207_user_details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105211645463_addingrental.resx">
+      <DependentUpon>202105211645463_addingrental.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105220040473_movie-availablity.resx">
+      <DependentUpon>202105220040473_movie-availablity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

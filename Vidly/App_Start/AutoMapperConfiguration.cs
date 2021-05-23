@@ -6,6 +6,7 @@ using System.Web;
 using Vidly.Models;
 using Vidly.Dtos;
 using Vidly.Dtos.Movie;
+using Vidly.Dtos.Rentals;
 
 namespace Vidly.App_Start
 {
@@ -25,6 +26,10 @@ namespace Vidly.App_Start
                 cfg.CreateMap<Movie, Movie>();
                 cfg.CreateMap<Movie, MovieDto>().ForMember(dis=>dis.Genre,src => src.MapFrom(x=>x.Genre.Name));
                 cfg.CreateMap<MovieCreateDto, Movie>();
+
+
+                //rentals
+                cfg.CreateMap<Rental, RentalDto>().ForMember(d=>d.Customer,s=>s.MapFrom(x=>x.Customer.Name)).ForMember(d=>d.Movie,s=>s.MapFrom(x=>x.Movie.Name));
             });
             Mapper = mapperConfiguration.CreateMapper();
         }
