@@ -29,8 +29,10 @@ namespace Vidly.Controllers.Api
         [HttpPost]
         public IHttpActionResult CreateNewRental(NewRentalDto newRental)
         {
+            if (newRental == null)
+                return BadRequest("No Data submitted");
 
-            if (newRental.MovieIDs.Count() == 0)
+            if (newRental.MovieIDs == null || newRental.MovieIDs.Count() == 0)
                 return BadRequest("No Movie Ids have been given.");
 
             if (!_context.Customers.Any(x => x.ID == newRental.CustomerId))
@@ -46,8 +48,8 @@ namespace Vidly.Controllers.Api
             {
                 if (movie.NumberInStock == 0)
                     return BadRequest("Movie Not available.");
-
-                _context.Rentals.Add(new Rental() { CustomerID = newRental.CustomerId, Movie = movie, DateRented = DateTime.Now });
+                var date = DateTime.Now;
+                _context.Rentals.Add(new Rental() { CustomerID = newRental.CustomerId, MovieID = movie.Id, DateRented = date });
                 movie.NumberInStock--;
             }
             _context.SaveChanges();

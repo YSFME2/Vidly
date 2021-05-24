@@ -14,7 +14,7 @@ namespace Vidly.Models
         [Required]
         public int CustomerID { get; set; }
         public DateTime DateRented { get; set; }
-        public DateTime DateReturned { get; set; }
+        public DateTime? DateReturned { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Movie Movie { get; set; }

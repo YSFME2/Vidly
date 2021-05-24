@@ -15,7 +15,7 @@ namespace Vidly.Migrations
                         MovieID = c.Int(nullable: false),
                         CustomerID = c.Int(nullable: false),
                         DateRented = c.DateTime(nullable: false),
-                        DateReturned = c.DateTime(nullable: false),
+                        DateReturned = c.DateTime(nullable: true),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Customers", t => t.CustomerID, cascadeDelete: true)

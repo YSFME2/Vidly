@@ -2,28 +2,54 @@
 @{
     ViewBag.Title = "New Rental Form";
 }
+@section style
+{
+    <style>
+        .tt-container {
+            position: relative;
+        }
+
+        .form-control {
+            width: 280px;
+            height: 50px;
+            font-size: 24px;
+        }
+    </style>
+}
+
 
 <h2>New Rental Form</h2>
 
-<form>
+<form id="rentalForm">
     <div class="form-group">
         <label>Customer</label>
-        <input id="customer" type="text" value="" class="form-control" />
+        <div class="tt-container">
+            <input id="customer" type="text" name="customer" data-rule-validCustomer="true" value="" required class="form-control col-sm-6 col-md-4" />
+        </div>
     </div>
     <div class="form-group">
         <label>Movie</label>
-        <input id="movie" type="text" value="" class="form-control" />
+        <div class="tt-container">
+            <input id="movie" type="text" name="movie" data-rule-validmovies="true" value="" class="form-control col-sm-6 col-md-4" />
+        </div>
     </div>
-    <ul id="movies" class="list-group"></ul>
+    <div class="row">
+        <div class="col-sm-6 col-md-4">
+            <ul id="movies" class="list-group"></ul>
+        </div>
+    </div>
+
     <button class="btn btn-primary">Submit</button>
 </form>
 
 @section Scripts
 {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
         $(document).ready(function () {
+
             var vm = {
-                movieIds:[]
+                movieIds: []
             };
 
             var customers = new Bloodhound({
@@ -36,7 +62,11 @@
                 }
             });
 
-            $('#customer').typeahead(null, {
+            $('#customer').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 1
+            }, {
                 name: 'customers',
                 display: 'name',
                 source: customers
@@ -54,16 +84,52 @@
                 }
             });
 
-            $('#movie').typeahead(null, {
+            $('#movie').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 1
+            }, {
                 name: 'movies',
                 display: 'name',
                 source: movies
             }).on("typeahead:select", function (e, movie) {
-                $("#movies").append("<li>" + movie.name + "</li>");
-                $("#movie").typeahead("val", "");
-                debugger;
-                vm.movieIds.push(movie.id);
+                if (vm.movieIds.indexOf(movie.id) < 0) {
+                    $("#movies").append("<li class='list-group-item'>" + movie.name + "</li>");
+                    $("#movie").typeahead("val", "");
+                    vm.movieIds.push(movie.id);
+                }
             });
+
+            $.validator.addMethod("validCustomer", function () { return vm.customerId && vm.customerId !== 0; }, "Please select customer.");
+            $.validator.addMethod("validmovies", function () { return vm.movieIds.length > 0; }, "Please add movie.");
+
+            var validat = $("#rentalForm").validate({
+                submitHandler: function (e) {
+                    $.ajax({
+                        url: "/api/Rentals",
+                        method: "POST",
+                        data: vm
+                    }).done(function () {
+                        toastr.success("Rentals successfully recorded.");
+                        $("#movie").typeahead("val", "");
+                        $("#customer").typeahead("val", "");
+                        $("#movies").empty();
+
+                        validat.resetForm();
+
+                        vm = { movieIds: [] };
+
+                    }).fail(function (e) {
+                        debugger;
+                        toastr.error(e.responseJSON.message);
+                    });
+                    return false;
+                }
+            });
+
+
+            $(".tt-hint").attr("data-rule-validCustomer", "false");
+            $(".tt-hint").attr("data-rule-validmovies", "false");
         });
     </script>
 }
